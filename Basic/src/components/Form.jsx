@@ -1,18 +1,39 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { userFormValidation } from "./userFormValidation";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const Form = () => {
   const { register, reset, handleSubmit, formState } = useForm({
     defaultValues: {
       username: "",
       email: "",
+      password: "",
+      samepassword: "",
+      age: 0,
+      date: "",
+      country: "",
+      gender: "",
+      comment: "",
+      termsandconditions: false,
     },
+    resolver: yupResolver(userFormValidation),
   });
   const { errors } = formState;
+  console.log(errors);
+
+  function onSubmit(data, e) {
+    e.preventDefault();
+    console.log(data);
+  }
   return (
     <>
       <section className="bg-gray-200 max-w-96 mx-auto p-12 mt-2">
-        <form action="#" className="flex flex-col gap-4">
+        <form
+          action="#"
+          className="flex flex-col gap-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <p>Personal Details:</p>
           <div className="flex flex-col">
             <label htmlFor="username">Username:</label>
@@ -22,6 +43,7 @@ const Form = () => {
               id="username"
               {...register("username")}
             />
+            <p className="text-red-500 text-sm">{errors.username?.message}</p>
           </div>
           <div className="flex flex-col">
             <label htmlFor="email">Email:</label>
@@ -31,6 +53,7 @@ const Form = () => {
               id="email"
               {...register("email")}
             />
+            <p className="text-red-500 text-sm">{errors.email?.message}</p>
           </div>
           <div className="flex flex-col">
             <label htmlFor="password">Password:</label>
@@ -40,6 +63,7 @@ const Form = () => {
               id="password"
               {...register("password")}
             />
+            <p className="text-red-500 text-sm">{errors.password?.message}</p>
           </div>
           <div className="flex flex-col">
             <label htmlFor="samepassword">Re-enter Password:</label>
@@ -49,14 +73,19 @@ const Form = () => {
               id="samepassword"
               {...register("samepassword")}
             />
+            <p className="text-red-500 text-sm">
+              {errors.samepassword?.message}
+            </p>
           </div>
           <div className="flex flex-col">
             <label htmlFor="age">Age:</label>
             <input type="number" name="age" id="age" {...register("age")} />
+            <p className="text-red-500 text-sm">{errors.age?.message}</p>
           </div>
           <div className="flex flex-col">
             <label htmlFor="date">Birth of Date:</label>
             <input type="date" name="date" id="date" {...register("date")} />
+            <p className="text-red-500 text-sm">{errors.date?.message}</p>
           </div>
           <div className="flex flex-col">
             <label htmlFor="country">Country:</label>
@@ -67,6 +96,7 @@ const Form = () => {
               <option value="UK">UK</option>
               <option value="Australia">Australia</option>
             </select>
+            <p className="text-red-500 text-sm">{errors.country?.message}</p>
           </div>
           <div className="flex flex-col">
             <label htmlFor="gender">Gender:</label>
@@ -100,6 +130,7 @@ const Form = () => {
               />
               Pefer not to say
             </div>
+            <p className="text-red-500 text-sm">{errors.gender?.message}</p>
           </div>
           <div className="flex flex-col">
             <label htmlFor="comment">Comment:</label>
@@ -110,15 +141,19 @@ const Form = () => {
               rows="10"
               {...register("comment")}
             ></textarea>
+            <p className="text-red-500 text-sm">{errors.comment?.message}</p>
           </div>
           <div className="flex gap-2">
             <input
               type="checkbox"
               name="checkbox"
               id="checkbox"
-              {...register("checkbox")}
+              {...register("termsandconditions")}
             />
             <label htmlFor="checkbox">Accept Terms and Conditions</label>
+            <p className="text-red-500 text-sm">
+              {errors.termsandconditions?.message}
+            </p>
           </div>
 
           <div className="flex gap-4 ">
@@ -128,7 +163,10 @@ const Form = () => {
             >
               Submit
             </button>
-            <button className="bg-red-700 text-white text-lg px-6 py-3 rounded-lg hover:bg-red-900 flex-grow">
+            <button
+              className="bg-red-700 text-white text-lg px-6 py-3 rounded-lg hover:bg-red-900 flex-grow"
+              onClick={() => reset()}
+            >
               Reset
             </button>
           </div>
